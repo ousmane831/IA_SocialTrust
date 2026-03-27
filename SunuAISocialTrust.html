@@ -1,0 +1,2780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SunuAISocialTrust — Trustworthy AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;1,9..144,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #050C1A;
+  --bg2: #0A1628;
+  --bg3: #0F1F35;
+  --card: rgba(255,255,255,0.04);
+  --card-hover: rgba(255,255,255,0.07);
+  --border: rgba(255,255,255,0.08);
+  --border-bright: rgba(255,255,255,0.15);
+  --text: #E8EDF5;
+  --text2: #8A9BB8;
+  --text3: #4A5A72;
+  --green: #00D68F;
+  --green-dim: rgba(0,214,143,0.12);
+  --green-mid: rgba(0,214,143,0.25);
+  --blue: #3B82F6;
+  --blue-dim: rgba(59,130,246,0.12);
+  --amber: #F59E0B;
+  --amber-dim: rgba(245,158,11,0.12);
+  --red: #EF4444;
+  --red-dim: rgba(239,68,68,0.12);
+  --purple: #8B5CF6;
+  --purple-dim: rgba(139,92,246,0.12);
+  --font: 'Space Grotesk', sans-serif;
+  --mono: 'IBM Plex Mono', monospace;
+  --serif: 'Fraunces', serif;
+  --r: 12px;
+  --r-lg: 20px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 3px; }
+
+/* ===== LAYOUT ===== */
+.app { display: flex; min-height: 100vh; }
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width: 260px;
+  min-height: 100vh;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 100;
+}
+
+.sidebar-logo {
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.logo-mark {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, var(--green), #00A87A);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.logo-text {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.3px;
+  line-height: 1.2;
+}
+
+.logo-sub {
+  font-size: 10px;
+  color: var(--green);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.nav {
+  flex: 1;
+  padding: 16px 12px;
+}
+
+.nav-section {
+  margin-bottom: 24px;
+}
+
+.nav-section-title {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text3);
+  padding: 0 8px;
+  margin-bottom: 6px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13.5px;
+  color: var(--text2);
+  transition: all 0.15s;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  position: relative;
+}
+
+.nav-item:hover { background: var(--card); color: var(--text); }
+.nav-item.active { background: var(--green-dim); color: var(--green); }
+.nav-item.active .nav-icon { color: var(--green); }
+
+.nav-icon {
+  width: 16px;
+  text-align: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.nav-badge {
+  margin-left: auto;
+  background: var(--green);
+  color: var(--bg);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 20px;
+}
+
+.sidebar-footer {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+}
+
+.trust-meter {
+  background: var(--card);
+  border-radius: var(--r);
+  padding: 12px;
+}
+
+.trust-label {
+  font-size: 11px;
+  color: var(--text3);
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.trust-label span:last-child { color: var(--green); font-weight: 600; }
+
+.trust-bar {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.trust-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--green), #00A87A);
+  border-radius: 2px;
+  width: 87%;
+  transition: width 1s ease;
+}
+
+/* ===== MAIN CONTENT ===== */
+.main {
+  margin-left: 260px;
+  flex: 1;
+  min-height: 100vh;
+}
+
+/* ===== TOPBAR ===== */
+.topbar {
+  height: 64px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+  gap: 16px;
+  background: rgba(5,12,26,0.95);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.topbar-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.topbar-sub {
+  font-size: 12px;
+  color: var(--text3);
+}
+
+.topbar-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.status-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-pill.active {
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(0,214,143,0.2);
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+/* ===== PAGES ===== */
+.page { display: none; padding: 32px; }
+.page.active { display: block; }
+
+/* ===== HERO ===== */
+.hero {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 40px;
+  margin-bottom: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -80px; right: -80px;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(0,214,143,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.hero-title {
+  font-family: var(--serif);
+  font-size: 36px;
+  font-weight: 300;
+  color: var(--text);
+  line-height: 1.2;
+  margin-bottom: 16px;
+  letter-spacing: -0.5px;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: var(--green);
+}
+
+.hero-desc {
+  font-size: 14px;
+  color: var(--text2);
+  max-width: 560px;
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s;
+  font-family: var(--font);
+}
+
+.btn-primary {
+  background: var(--green);
+  color: var(--bg);
+}
+
+.btn-primary:hover { background: #00C07F; transform: translateY(-1px); }
+
+.btn-secondary {
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border-bright);
+}
+
+.btn-secondary:hover { background: var(--card-hover); }
+
+.btn-danger {
+  background: var(--red-dim);
+  color: var(--red);
+  border: 1px solid rgba(239,68,68,0.2);
+}
+
+/* ===== STATS GRID ===== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.stat-card:hover { border-color: var(--border-bright); background: var(--card-hover); }
+
+.stat-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.stat-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.stat-icon.green { background: var(--green-dim); }
+.stat-icon.blue { background: var(--blue-dim); }
+.stat-icon.amber { background: var(--amber-dim); }
+.stat-icon.red { background: var(--red-dim); }
+
+.stat-trend {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 7px;
+  border-radius: 20px;
+}
+
+.stat-trend.up { background: var(--green-dim); color: var(--green); }
+.stat-trend.down { background: var(--red-dim); color: var(--red); }
+.stat-trend.neutral { background: var(--amber-dim); color: var(--amber); }
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--text3);
+}
+
+/* ===== CARDS ===== */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 24px;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.card-sub {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 2px;
+}
+
+/* ===== GRID 2/3 ===== */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.col-span-2 { grid-column: span 2; }
+
+/* ===== FORM ===== */
+.form-section {
+  margin-bottom: 28px;
+}
+
+.form-section-title {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group.full { grid-column: span 2; }
+
+label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text2);
+}
+
+input, select, textarea {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 13.5px;
+  transition: border-color 0.15s;
+  outline: none;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px var(--green-dim);
+}
+
+select option { background: var(--bg2); }
+textarea { resize: vertical; min-height: 80px; }
+
+.field-hint {
+  font-size: 11px;
+  color: var(--text3);
+}
+
+/* ===== PROGRESS ===== */
+.progress-track {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.8s ease;
+}
+
+/* ===== RESULT CARD ===== */
+.result-card {
+  border-radius: var(--r-lg);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.result-header {
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.result-header.eligible {
+  background: linear-gradient(135deg, rgba(0,214,143,0.1), rgba(0,214,143,0.03));
+  border-bottom: 1px solid rgba(0,214,143,0.15);
+}
+
+.result-header.ineligible {
+  background: linear-gradient(135deg, rgba(239,68,68,0.1), rgba(239,68,68,0.03));
+  border-bottom: 1px solid rgba(239,68,68,0.15);
+}
+
+.result-header.review {
+  background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(245,158,11,0.03));
+  border-bottom: 1px solid rgba(245,158,11,0.15);
+}
+
+.result-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.result-icon.eligible { background: var(--green-dim); }
+.result-icon.ineligible { background: var(--red-dim); }
+.result-icon.review { background: var(--amber-dim); }
+
+.result-title {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.result-title.eligible { color: var(--green); }
+.result-title.ineligible { color: var(--red); }
+.result-title.review { color: var(--amber); }
+
+.result-meta {
+  font-size: 12px;
+  color: var(--text2);
+  margin-top: 3px;
+}
+
+.result-body { padding: 24px; }
+
+/* ===== SHAP CHART ===== */
+.shap-container {
+  margin-top: 8px;
+}
+
+.shap-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.shap-label {
+  width: 180px;
+  font-size: 12px;
+  color: var(--text2);
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.shap-bar-track {
+  flex: 1;
+  height: 22px;
+  background: var(--border);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.shap-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  position: absolute;
+  transition: width 1s ease;
+}
+
+.shap-bar-fill.positive { background: linear-gradient(90deg, var(--green), rgba(0,214,143,0.6)); left: 0; }
+.shap-bar-fill.negative { background: linear-gradient(-90deg, var(--red), rgba(239,68,68,0.6)); right: 0; }
+
+.shap-value {
+  width: 60px;
+  font-size: 11.5px;
+  font-family: var(--mono);
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.shap-value.positive { color: var(--green); }
+.shap-value.negative { color: var(--red); }
+
+/* ===== CONFIDENCE SCORE ===== */
+.confidence-ring {
+  width: 100px;
+  height: 100px;
+}
+
+.conf-circle-bg {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 8;
+}
+
+.conf-circle-fill {
+  fill: none;
+  stroke: var(--green);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  transition: stroke-dashoffset 1.2s ease;
+}
+
+/* ===== BIAS DETECTOR ===== */
+.bias-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.bias-card {
+  background: var(--bg3);
+  border-radius: var(--r);
+  padding: 16px;
+  border: 1px solid var(--border);
+}
+
+.bias-label {
+  font-size: 11px;
+  color: var(--text3);
+  margin-bottom: 8px;
+}
+
+.bias-value {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.bias-status {
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ===== TABLE ===== */
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead th {
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text3);
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background 0.1s;
+}
+
+tbody tr:hover { background: var(--card); }
+tbody tr:last-child { border-bottom: none; }
+
+tbody td {
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--text);
+  vertical-align: middle;
+}
+
+/* ===== BADGE ===== */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.badge-green { background: var(--green-dim); color: var(--green); }
+.badge-red { background: var(--red-dim); color: var(--red); }
+.badge-amber { background: var(--amber-dim); color: var(--amber); }
+.badge-blue { background: var(--blue-dim); color: var(--blue); }
+.badge-purple { background: var(--purple-dim); color: var(--purple); }
+
+/* ===== SECURITY ===== */
+.security-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px;
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  margin-bottom: 12px;
+}
+
+.sec-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.sec-content { flex: 1; }
+.sec-title { font-size: 13.5px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+.sec-desc { font-size: 12px; color: var(--text3); line-height: 1.5; }
+.sec-status { margin-top: 8px; }
+
+/* ===== LOG ===== */
+.log-item {
+  display: flex;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+}
+
+.log-time { color: var(--text3); font-family: var(--mono); white-space: nowrap; }
+.log-msg { color: var(--text2); flex: 1; }
+.log-hash { color: var(--text3); font-family: var(--mono); }
+
+/* ===== TABS ===== */
+.tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--bg3);
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 24px;
+}
+
+.tab {
+  flex: 1;
+  padding: 8px 16px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: var(--text3);
+  transition: all 0.15s;
+  font-family: var(--font);
+  text-align: center;
+}
+
+.tab:hover { color: var(--text2); }
+.tab.active { background: var(--card); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+
+/* ===== MINI CHART ===== */
+.sparkline { display: flex; align-items: flex-end; gap: 3px; height: 40px; }
+.spark-bar {
+  flex: 1;
+  border-radius: 2px;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.spark-bar:hover { opacity: 0.8; }
+
+/* ===== NOTIFICATIONS ===== */
+.notification {
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  border-radius: var(--r);
+  margin-bottom: 10px;
+  border: 1px solid;
+}
+
+.notification.info { background: var(--blue-dim); border-color: rgba(59,130,246,0.2); }
+.notification.warn { background: var(--amber-dim); border-color: rgba(245,158,11,0.2); }
+.notification.success { background: var(--green-dim); border-color: rgba(0,214,143,0.2); }
+.notification.danger { background: var(--red-dim); border-color: rgba(239,68,68,0.2); }
+
+.notif-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.notif-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.notif-text { font-size: 12px; color: var(--text2); }
+
+.notification.info .notif-title { color: var(--blue); }
+.notification.warn .notif-title { color: var(--amber); }
+.notification.success .notif-title { color: var(--green); }
+.notification.danger .notif-title { color: var(--red); }
+
+/* ===== ENCRYPTION VISUAL ===== */
+.enc-visual {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--green);
+  background: var(--bg3);
+  border-radius: 8px;
+  padding: 12px;
+  line-height: 1.8;
+  border: 1px solid var(--border);
+  word-break: break-all;
+  opacity: 0.7;
+}
+
+/* ===== SCORE CARD ===== */
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.score-item {
+  text-align: center;
+  background: var(--bg3);
+  border-radius: var(--r);
+  padding: 16px 8px;
+  border: 1px solid var(--border);
+}
+
+.score-num {
+  font-size: 24px;
+  font-weight: 700;
+  font-family: var(--mono);
+}
+
+.score-lbl { font-size: 11px; color: var(--text3); margin-top: 4px; }
+
+/* ===== CHART WRAPPER — clé du responsive Chart.js ===== */
+.chart-wrap {
+  position: relative;
+  width: 100%;
+  height: 240px;
+}
+.chart-wrap-sm {
+  height: 220px;
+}
+.chart-wrap canvas {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* ===== HAMBURGER ===== */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border: 1px solid var(--border-bright);
+  border-radius: 8px;
+  background: var(--card);
+  cursor: pointer;
+  gap: 5px;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+.hamburger:hover { background: var(--card-hover); }
+.hamburger span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: transform 0.28s ease, opacity 0.2s ease, width 0.2s ease;
+  transform-origin: center;
+}
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; width: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ===== SIDEBAR OVERLAY ===== */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  z-index: 150;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  pointer-events: none;
+}
+.sidebar-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ===== RESPONSIVE — Tablette ≤ 960px ===== */
+@media (max-width: 960px) {
+  /* Affiche le bouton hamburger */
+  .hamburger { display: flex; }
+  .sidebar-overlay { display: block; }
+
+  /* Sidebar devient un drawer latéral */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: 272px;
+    height: 100dvh;
+    height: 100vh;
+    z-index: 200;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1),
+                box-shadow 0.3s ease;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .sidebar.open {
+    transform: translateX(0);
+    box-shadow: 12px 0 48px rgba(0,0,0,0.55);
+  }
+
+  /* Main prend toute la largeur */
+  .main { margin-left: 0; width: 100%; }
+
+  /* Topbar compacte */
+  .topbar { padding: 0 16px; gap: 10px; }
+
+  /* Grilles à 2 colonnes */
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .bias-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .score-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+
+  /* Page padding */
+  .page { padding: 24px 20px; }
+  .hero { padding: 32px 28px; }
+}
+
+/* ===== RESPONSIVE — Mobile ≤ 600px ===== */
+@media (max-width: 600px) {
+  /* Topbar */
+  .topbar { padding: 0 12px; height: 56px; gap: 8px; }
+  .topbar-title { font-size: 14px; }
+  .topbar-sub { display: none; }
+  .topbar-right { gap: 6px; }
+  .status-pill { padding: 5px 8px; font-size: 11px; }
+
+  /* Cache le texte du pill sur très petit écran */
+  .status-pill > span:not(.status-dot) { display: none; }
+
+  /* Page */
+  .page { padding: 16px 12px; }
+
+  /* Hero */
+  .hero { padding: 20px 16px; margin-bottom: 16px; }
+  .hero-title { font-size: 24px; }
+  .hero-desc { font-size: 12px; margin-bottom: 18px; }
+  .hero-actions { flex-direction: column; gap: 8px; }
+  .hero-actions .btn { width: 100%; justify-content: center; }
+
+  /* Stats */
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
+  .stat-value { font-size: 22px; }
+  .stat-label { font-size: 11px; }
+  .stat-card { padding: 14px; }
+
+  /* Grilles → 1 colonne */
+  .grid-2 { grid-template-columns: 1fr; gap: 12px; }
+  .grid-3 { grid-template-columns: 1fr; gap: 10px; }
+  .bias-grid { grid-template-columns: 1fr; gap: 10px; }
+  .form-grid { grid-template-columns: 1fr; gap: 12px; }
+  .form-group.full { grid-column: span 1; }
+  .score-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .col-span-2 { grid-column: span 1; }
+
+  /* Cards */
+  .card { padding: 14px; }
+  .card-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .card-header .btn { width: 100%; justify-content: center; }
+
+  /* Charts — plus petits sur mobile */
+  .chart-wrap { height: 190px; }
+  .chart-wrap-sm { height: 200px; }
+
+  /* Boutons */
+  .btn { padding: 8px 14px; font-size: 12px; }
+  .btn-primary, .btn-secondary, .btn-danger { white-space: nowrap; }
+
+  /* Formulaire */
+  input, select, textarea { font-size: 16px; /* évite le zoom iOS */ }
+
+  /* Tables — scroll horizontal */
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: var(--r); }
+  table { min-width: 520px; font-size: 12px; }
+  th, td { padding: 8px 10px; }
+
+  /* Résultat IA */
+  .result-header { padding: 16px; flex-direction: column; text-align: center; gap: 10px; }
+  .result-header > div:last-child { margin-left: 0; }
+  .result-body { padding: 14px; }
+  .confidence-ring { width: 80px; height: 80px; }
+
+  /* SHAP */
+  .shap-row { flex-direction: column; align-items: stretch; gap: 4px; }
+  .shap-label { width: 100%; text-align: left; font-size: 11px; }
+  .shap-bar-track { height: 18px; }
+
+  /* Tabs */
+  .tabs { flex-wrap: wrap; gap: 4px; }
+  .tab { flex: 0 0 calc(50% - 4px); padding: 8px 6px; font-size: 11px; text-align: center; }
+
+  /* Modal */
+  .modal { width: 96%; max-width: none; margin: 8px; padding: 20px; }
+  .modal-actions { flex-direction: column-reverse; gap: 8px; }
+  .modal-actions .btn { width: 100%; justify-content: center; }
+
+  /* Logs */
+  .log-item { flex-wrap: wrap; gap: 4px; padding: 8px 0; }
+  .log-time { width: 100%; font-size: 10px; margin-bottom: 2px; }
+  .log-hash { font-size: 10px; }
+
+  /* Historique filters */
+  #page-historique > div:first-child {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  #page-historique > div:first-child input,
+  #page-historique > div:first-child select { max-width: 100% !important; flex: 1 1 calc(50% - 4px); }
+  #page-historique > div:first-child .btn { width: 100%; margin-left: 0 !important; justify-content: center; }
+
+  /* Actions résultat */
+  #result-view > div:last-child > div[style*="display:flex"] { flex-direction: column; }
+  #result-view .btn { width: 100%; justify-content: center; }
+}
+
+/* ===== RESPONSIVE — Très petit ≤ 380px ===== */
+@media (max-width: 380px) {
+  .stats-grid { grid-template-columns: 1fr; }
+  .hero-title { font-size: 20px; }
+  .topbar-title { font-size: 13px; }
+  .chart-wrap { height: 170px; }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.page.active { animation: fadeIn 0.3s ease forwards; }
+
+@keyframes shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: 200px 0; }
+}
+
+.loading-bar {
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--green), transparent);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* ===== TOOLTIP ===== */
+.tooltip-wrap { position: relative; display: inline-block; }
+.tooltip-text {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg2);
+  border: 1px solid var(--border-bright);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 11px;
+  color: var(--text2);
+  white-space: nowrap;
+  z-index: 200;
+}
+
+.tooltip-wrap:hover .tooltip-text { display: block; }
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 500;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--bg2);
+  border: 1px solid var(--border-bright);
+  border-radius: var(--r-lg);
+  padding: 32px;
+  max-width: 500px;
+  width: 90%;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.modal-desc { font-size: 13px; color: var(--text2); margin-bottom: 24px; line-height: 1.6; }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+/* ===== RECOURS ===== */
+.recours-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.recours-step {
+  display: flex;
+  gap: 16px;
+  padding: 16px 0;
+  position: relative;
+}
+
+.recours-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 15px;
+  top: 48px;
+  bottom: 0;
+  width: 1px;
+  background: var(--border);
+}
+
+.recours-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-bright);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+  color: var(--text2);
+  background: var(--bg3);
+}
+
+.recours-content { flex: 1; }
+.recours-title { font-size: 13.5px; font-weight: 600; margin-bottom: 3px; }
+.recours-desc { font-size: 12px; color: var(--text3); }
+</style>
+</head>
+<body>
+
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<div class="app">
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">
+      <div class="logo-icon">🛡</div>
+      <div>
+        <div class="logo-text">SunuAISocialTrust</div>
+        <div class="logo-sub">iSAFE 2026</div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <div class="nav-section">
+      <div class="nav-section-title">Main</div>
+      <button class="nav-item active" onclick="showPage('dashboard')">
+        <span class="nav-icon">◼</span> Dashboard
+        <span class="nav-badge">Live</span>
+      </button>
+      <button class="nav-item" onclick="showPage('demande')">
+        <span class="nav-icon">✦</span> New Application
+      </button>
+      <button class="nav-item" onclick="showPage('historique')">
+        <span class="nav-icon">◷</span> History
+      </button>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">Trust & Fairness</div>
+      <button class="nav-item" onclick="showPage('explicabilite')">
+        <span class="nav-icon">◈</span> SHAP Explainability
+      </button>
+      <button class="nav-item" onclick="showPage('biais')">
+        <span class="nav-icon">⬡</span> Bias Detection
+      </button>
+      <button class="nav-item" onclick="showPage('securite')">
+        <span class="nav-icon">⬢</span> AES-256 Security
+      </button>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">Administration</div>
+      <button class="nav-item" onclick="showPage('audit')">
+        <span class="nav-icon">◻</span> Audit & Logs
+      </button>
+      <button class="nav-item" onclick="showPage('rapport')">
+        <span class="nav-icon">◈</span> Trust Report
+      </button>
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="trust-meter">
+      <div class="trust-label">
+        <span>Global Trust Score</span>
+        <span id="global-trust">87%</span>
+      </div>
+      <div class="trust-bar">
+        <div class="trust-fill" id="trust-fill-bar"></div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ===== MAIN ===== -->
+<main class="main">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <button class="hamburger" id="hamburger-btn" onclick="toggleSidebar()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div style="flex:1; min-width:0;">
+      <div class="topbar-title" id="page-title">Dashboard</div>
+      <div class="topbar-sub" id="page-sub">Overview of the AI social assistance system</div>
+    </div>
+    <div class="topbar-right">
+      <div class="status-pill active">
+        <div class="status-dot"></div>
+        System Operational
+      </div>
+      <button class="btn btn-primary" onclick="showPage('demande')">
+        + New Application
+      </button>
+    </div>
+  </header>
+
+  <!-- =============================== -->
+  <!-- PAGE: DASHBOARD                  -->
+  <!-- =============================== -->
+  <div class="page active" id="page-dashboard">
+    <div class="hero">
+      <div class="hero-eyebrow">Senegal — AI Social Assistance</div>
+      <div class="hero-title"><em>Transparent</em> AI for<br>fair decisions</div>
+      <div class="hero-desc">SunuAISocialTrust determines eligibility for CMU, PNBSF and family assistance programs with complete SHAP explainability, bias detection and AES-256 encryption of all personal data.</div>
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="showPage('demande')">✦ Submit Application</button>
+        <button class="btn btn-secondary" onclick="showPage('explicabilite')">◈ View Explainability</button>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card" onclick="showPage('historique')">
+        <div class="stat-top">
+          <div class="stat-icon green">📋</div>
+          <span class="stat-trend up">+12%</span>
+        </div>
+        <div class="stat-value" id="s-demandes">1,847</div>
+        <div class="stat-label">Applications Processed</div>
+      </div>
+      <div class="stat-card" onclick="showPage('historique')">
+        <div class="stat-top">
+          <div class="stat-icon blue">✓</div>
+          <span class="stat-trend up">+5%</span>
+        </div>
+        <div class="stat-value" id="s-eligible">68%</div>
+        <div class="stat-label">Eligibility Rate</div>
+      </div>
+      <div class="stat-card" onclick="showPage('biais')">
+        <div class="stat-top">
+          <div class="stat-icon amber">⬡</div>
+          <span class="stat-trend neutral">Stable</span>
+        </div>
+        <div class="stat-value">0.03</div>
+        <div class="stat-label">Gender Bias Index</div>
+      </div>
+      <div class="stat-card" onclick="showPage('explicabilite')">
+        <div class="stat-top">
+          <div class="stat-icon green">🛡</div>
+          <span class="stat-trend up">+2%</span>
+        </div>
+        <div class="stat-value">87%</div>
+        <div class="stat-label">Average Trust Score</div>
+      </div>
+    </div>
+
+    <!-- CHARTS ROW -->
+    <div class="grid-2" style="margin-bottom:24px">
+
+      <!-- Activité hebdomadaire -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Applications This Week</div>
+            <div class="card-sub">Daily volume by status</div>
+          </div>
+        </div>
+        <div class="chart-wrap"><canvas id="weekChart"></canvas></div>
+      </div>
+
+      <!-- Distribution programmes -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Distribution by Program</div>
+            <div class="card-sub">CMU · PNBSF · Family Assistance</div>
+          </div>
+        </div>
+        <div class="chart-wrap"><canvas id="progChart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- DERNIÈRES DEMANDES -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Recent Decisions</div>
+          <div class="card-sub">Real-time — Last 5 applications</div>
+        </div>
+        <button class="btn btn-secondary" onclick="showPage('historique')">View All →</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Program</th>
+              <th>Region</th>
+              <th>Confidence</th>
+              <th>Decision</th>
+              <th>Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="recent-table">
+            <!-- dynamique JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- =============================== -->
+  <!-- PAGE: NOUVELLE DEMANDE           -->
+  <!-- =============================== -->
+  <div class="page" id="page-demande">
+    <div id="form-view">
+      <div class="notification info" style="margin-bottom:24px">
+        <div class="notif-icon">ℹ</div>
+        <div>
+          <div class="notif-title">Protected Data</div>
+          <div class="notif-text">All information is encrypted with AES-256 before storage. The AI explains each decision via SHAP to ensure transparency.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <form onsubmit="return false">
+          <!-- Section 1: Identité -->
+          <div class="form-section">
+            <div class="form-section-title">01 — Applicant Identity</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>NINEA / CIN Number *</label>
+                <input type="text" id="f-ninea" placeholder="SN-XXXX-XXXX">
+              </div>
+              <div class="form-group">
+                <label>Requested Program *</label>
+                <select id="f-programme">
+                  <option value="">— Select —</option>
+                  <option value="CMU">CMU — Universal Health Coverage</option>
+                  <option value="PNBSF">PNBSF — National Family Security Scholarship Program</option>
+                  <option value="BOURSE">Emergency Family Assistance</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Gender *</label>
+                <select id="f-genre">
+                  <option value="">— Select —</option>
+                  <option value="F">Female</option>
+                  <option value="M">Male</option>
+                  <option value="A">Other / Not specified</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Age *</label>
+                <input type="number" id="f-age" min="18" max="100" placeholder="Ex: 34">
+              </div>
+              <div class="form-group">
+                <label>Region *</label>
+                <select id="f-region">
+                  <option value="">— Select —</option>
+                  <option>Dakar</option>
+                  <option>Thiès</option>
+                  <option>Saint-Louis</option>
+                  <option>Ziguinchor</option>
+                  <option>Kaolack</option>
+                  <option>Diourbel</option>
+                  <option>Tambacounda</option>
+                  <option>Matam</option>
+                  <option>Louga</option>
+                  <option>Fatick</option>
+                  <option>Kolda</option>
+                  <option>Sédhiou</option>
+                  <option>Kaffrine</option>
+                  <option>Kédougou</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Residence Area</label>
+                <select id="f-zone">
+                  <option value="urbain">Urban</option>
+                  <option value="periurbain">Peri-urban</option>
+                  <option value="rural">Rural</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: Situation économique -->
+          <div class="form-section">
+            <div class="form-section-title">02 — Economic Situation</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Monthly Household Income (FCFA) *</label>
+                <input type="number" id="f-revenu" placeholder="Ex: 75000" min="0">
+                <span class="field-hint">PNBSF poverty threshold: ≤ 120,000 FCFA</span>
+              </div>
+              <div class="form-group">
+                <label>Household Size *</label>
+                <input type="number" id="f-menage" placeholder="Number of people" min="1" max="20">
+              </div>
+              <div class="form-group">
+                <label>Number of Children (0–18 years)</label>
+                <input type="number" id="f-enfants" placeholder="0" min="0" max="15">
+              </div>
+              <div class="form-group">
+                <label>Employment Status *</label>
+                <select id="f-emploi">
+                  <option value="">— Select —</option>
+                  <option value="sans">Unemployed</option>
+                  <option value="informel">Informal Sector</option>
+                  <option value="agricole">Farmer / Livestock</option>
+                  <option value="salarie">Employee</option>
+                  <option value="independant">Self-employed</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Access to Drinking Water</label>
+                <select id="f-eau">
+                  <option value="oui">Yes</option>
+                  <option value="partiel">Partial</option>
+                  <option value="non">No</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Housing Type</label>
+                <select id="f-logement">
+                  <option value="beton">Concrete Construction</option>
+                  <option value="banco">Mud / Semi-durable</option>
+                  <option value="paille">Straw / Precarious</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 3: Santé / Vulnérabilité -->
+          <div class="form-section">
+            <div class="form-section-title">03 — Vulnerability & Health</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Persons with Disabilities</label>
+                <select id="f-handicap">
+                  <option value="0">None</option>
+                  <option value="1">1 person</option>
+                  <option value="2">2 people or more</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Elderly People (>65 years) in Household</label>
+                <select id="f-ages">
+                  <option value="0">None</option>
+                  <option value="1">1 person</option>
+                  <option value="2">2 or more</option>
+                </select>
+              </div>
+              <div class="form-group full">
+                <label>Particular Vulnerability Situation</label>
+                <textarea id="f-vulnerabilite" placeholder="Describe any particular situation: female head of household, natural disaster victim, returnee migrant, etc."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:12px; justify-content:flex-end">
+            <button class="btn btn-secondary" onclick="resetForm()">Reset</button>
+            <button class="btn btn-primary" onclick="analyserDemande()">
+              🔍 Analyze Eligibility
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- LOADING -->
+    <div id="loading-view" style="display:none; text-align:center; padding:80px 0">
+      <div class="loading-bar" style="margin-bottom:40px; border-radius:2px"></div>
+      <div style="font-size:40px; margin-bottom:16px">🛡</div>
+      <div style="font-size:18px; font-weight:600; margin-bottom:8px">Analysis in progress…</div>
+      <div style="font-size:13px; color:var(--text3)" id="loading-step">Encrypting data with AES-256…</div>
+      <div style="margin-top:24px; max-width:300px; margin-left:auto; margin-right:auto">
+        <div class="progress-track">
+          <div class="progress-fill" id="loading-progress" style="background:var(--green); width:0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RÉSULTAT -->
+    <div id="result-view" style="display:none">
+      <!-- Résultat principal -->
+      <div class="result-card" id="main-result">
+        <div class="result-header eligible" id="result-header">
+          <div class="result-icon eligible" id="result-icon">✓</div>
+          <div>
+            <div class="result-title eligible" id="result-title">Eligible</div>
+            <div class="result-meta" id="result-meta">CMU — Couverture Maladie Universelle</div>
+          </div>
+          <div style="margin-left:auto; text-align:center">
+            <svg class="confidence-ring" viewBox="0 0 100 100">
+              <circle class="conf-circle-bg" cx="50" cy="50" r="40"/>
+              <circle class="conf-circle-fill" id="conf-ring" cx="50" cy="50" r="40"
+                stroke-dasharray="251.2" stroke-dashoffset="251.2"/>
+            </svg>
+            <div style="font-size:12px; color:var(--text3); margin-top:-8px">Confidence <span id="conf-pct" style="color:var(--green); font-weight:700">--</span></div>
+          </div>
+        </div>
+
+        <div class="result-body">
+          <div class="grid-2" style="gap:24px">
+            <!-- SHAP -->
+            <div>
+              <div class="card-title" style="margin-bottom:6px">◈ SHAP Explanation</div>
+              <div class="card-sub" style="margin-bottom:16px">Factors that influenced the decision</div>
+              <div class="shap-container" id="shap-bars">
+                <!-- Dynamique -->
+              </div>
+              <div style="display:flex; gap:16px; margin-top:12px; font-size:11px; color:var(--text3)">
+                <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:var(--green);display:inline-block"></span> Favorable factor</span>
+                <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:var(--red);display:inline-block"></span> Unfavorable factor</span>
+              </div>
+            </div>
+
+            <!-- Score breakdown -->
+            <div>
+              <div class="card-title" style="margin-bottom:6px">◼ Detailed Confidence Score</div>
+              <div class="card-sub" style="margin-bottom:16px">Breakdown by confidence criteria</div>
+              <div class="score-grid">
+                <div class="score-item">
+                  <div class="score-num" id="sc-precision" style="color:var(--green)">--</div>
+                  <div class="score-lbl">Precision</div>
+                </div>
+                <div class="score-item">
+                  <div class="score-num" id="sc-equite" style="color:var(--blue)">--</div>
+                  <div class="score-lbl">Fairness</div>
+                </div>
+                <div class="score-item">
+                  <div class="score-num" id="sc-robustesse" style="color:var(--amber)">--</div>
+                  <div class="score-lbl">Robustness</div>
+                </div>
+                <div class="score-item">
+                  <div class="score-num" id="sc-transparence" style="color:var(--purple)">--</div>
+                  <div class="score-lbl">Transparency</div>
+                </div>
+              </div>
+
+              <div style="margin-top:20px">
+                <div class="card-title" style="margin-bottom:12px; font-size:12px">Available Appeals</div>
+                <div class="recours-steps">
+                  <div class="recours-step">
+                    <div class="recours-num">1</div>
+                    <div class="recours-content">
+                      <div class="recours-title">Revision Request</div>
+                      <div class="recours-desc">Submit supporting documents within 15 days</div>
+                    </div>
+                  </div>
+                  <div class="recours-step">
+                    <div class="recours-num">2</div>
+                    <div class="recours-content">
+                      <div class="recours-title">Human Review</div>
+                      <div class="recours-desc">Review by DGPSN agent within 30 days</div>
+                    </div>
+                  </div>
+                  <div class="recours-step" style="padding-bottom:0">
+                    <div class="recours-num">3</div>
+                    <div class="recours-content">
+                      <div class="recours-title">Hierarchical Appeal</div>
+                      <div class="recours-desc">Escalation to the Republic Mediator</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:20px; display:flex; gap:10px">
+            <button class="btn btn-primary" onclick="telechargerRapport()">⬇ Download PDF Report</button>
+            <button class="btn btn-secondary" onclick="resetForm(); document.getElementById('form-view').style.display='block'; document.getElementById('result-view').style.display='none'">← New Application</button>
+            <button class="btn btn-secondary" onclick="showPage('explicabilite')">◈ View Detailed SHAP</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =============================== -->
+  <!-- PAGE: HISTORIQUE                 -->
+  <!-- =============================== -->
+  <div class="page" id="page-historique">
+    <div style="display:flex; gap:12px; margin-bottom:24px; align-items:center">
+      <input type="text" placeholder="Search by ID, region…" style="max-width:280px">
+      <select style="max-width:180px">
+        <option>All Programs</option>
+        <option>CMU</option>
+        <option>PNBSF</option>
+        <option>Family Assistance</option>
+      </select>
+      <select style="max-width:160px">
+        <option>All Statuses</option>
+        <option>Eligible</option>
+        <option>Not Eligible</option>
+        <option>Under Review</option>
+      </select>
+      <button class="btn btn-secondary" style="margin-left:auto">⬇ Export CSV</button>
+    </div>
+
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Application ID</th>
+              <th>Program</th>
+              <th>Region</th>
+              <th>Gender</th>
+              <th>Income</th>
+              <th>Confidence</th>
+              <th>Decision</th>
+              <th>Date</th>
+              <th>SHAP</th>
+            </tr>
+          </thead>
+          <tbody id="hist-table"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- =============================== -->
+  <!-- PAGE: EXPLICABILITÉ SHAP         -->
+  <!-- =============================== -->
+  <div class="page" id="page-explicabilite">
+    <div class="notification success" style="margin-bottom:24px">
+      <div class="notif-icon">◈</div>
+      <div>
+        <div class="notif-title">SHAP (SHapley Additive exPlanations) — Certified Explanation</div>
+        <div class="notif-text">Each SHAP value represents the marginal contribution of a variable to the decision, ensuring a faithful and coherent explanation of the underlying XGBoost model.</div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:24px">
+      <!-- Global Feature Importance -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Global Feature Importance</div>
+            <div class="card-sub">Average SHAP values on 1,847 applications</div>
+          </div>
+        </div>
+        <div class="chart-wrap"><canvas id="shapGlobalChart"></canvas></div>
+      </div>
+
+      <!-- Distribution des scores -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Confidence Score Distribution</div>
+            <div class="card-sub">Distribution on complete corpus</div>
+          </div>
+        </div>
+        <div class="chart-wrap"><canvas id="confDistChart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Explication individuelle interactive -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Individual Explanation Simulation</div>
+          <div class="card-sub">Modify parameters and observe real-time SHAP impact</div>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div>
+          <div style="display:flex; flex-direction:column; gap:14px">
+            <div class="form-group">
+              <label>Monthly Household Income (FCFA)</label>
+              <input type="range" id="sim-revenu" min="0" max="300000" step="5000" value="80000" oninput="updateSimulation()" style="accent-color:var(--green)">
+              <span class="field-hint" id="sim-revenu-val">80,000 FCFA</span>
+            </div>
+            <div class="form-group">
+              <label>Household Size</label>
+              <input type="range" id="sim-menage" min="1" max="12" step="1" value="5" oninput="updateSimulation()" style="accent-color:var(--green)">
+              <span class="field-hint" id="sim-menage-val">5 people</span>
+            </div>
+            <div class="form-group">
+              <label>Number of Children</label>
+              <input type="range" id="sim-enfants" min="0" max="8" step="1" value="3" oninput="updateSimulation()" style="accent-color:var(--green)">
+              <span class="field-hint" id="sim-enfants-val">3 children</span>
+            </div>
+            <div class="form-group">
+              <label>Zone</label>
+              <select id="sim-zone" onchange="updateSimulation()">
+                <option value="rural">Rural</option>
+                <option value="periurbain">Péri-urbain</option>
+                <option value="urbain">Urbain</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="margin-bottom:12px; font-size:12px; color:var(--text3)">Simulated SHAP Impact</div>
+          <div id="sim-shap-bars"></div>
+          <div style="margin-top:20px; padding:16px; background:var(--bg3); border-radius:var(--r); border:1px solid var(--border)">
+            <div style="font-size:11px; color:var(--text3); margin-bottom:6px">Simulated Decision</div>
+            <div style="font-size:22px; font-weight:700" id="sim-decision" style="color:var(--green)">Eligible</div>
+            <div style="font-size:12px; color:var(--text2); margin-top:4px" id="sim-conf">Confidence: 82%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =============================== -->
+  <!-- PAGE: BIAIS                      -->
+  <!-- =============================== -->
+  <div class="page" id="page-biais">
+    <div class="notification warn" style="margin-bottom:24px">
+      <div class="notif-icon">⬡</div>
+      <div>
+        <div class="notif-title">Continuous Algorithmic Bias Monitoring</div>
+        <div class="notif-text">Fairness metrics calculated according to IBM AI Fairness 360 standards. Alert threshold: disparate impact < 0.8 or > 1.25.</div>
+      </div>
+    </div>
+
+    <!-- Métriques biais -->
+    <div class="bias-grid" style="margin-bottom:24px">
+      <div class="bias-card">
+        <div class="bias-label">Disparate Impact — Gender</div>
+        <div class="bias-value" style="color:var(--green)">0.97</div>
+        <div class="bias-status">
+          <span class="badge badge-green">✓ Fair</span>
+        </div>
+        <div style="margin-top:10px">
+          <div class="progress-track">
+            <div class="progress-fill" style="background:var(--green); width:97%"></div>
+          </div>
+          <div style="font-size:10px; color:var(--text3); margin-top:4px">Ideal: 1.0 · Threshold: 0.8–1.25</div>
+        </div>
+      </div>
+      <div class="bias-card">
+        <div class="bias-label">Disparate Impact — Region</div>
+        <div class="bias-value" style="color:var(--amber)">0.84</div>
+        <div class="bias-status">
+          <span class="badge badge-amber">⚠ Monitor</span>
+        </div>
+        <div style="margin-top:10px">
+          <div class="progress-track">
+            <div class="progress-fill" style="background:var(--amber); width:84%"></div>
+          </div>
+          <div style="font-size:10px; color:var(--text3); margin-top:4px">Rural/urban gap detected</div>
+        </div>
+      </div>
+      <div class="bias-card">
+        <div class="bias-label">Equal Opportunity — Age</div>
+        <div class="bias-value" style="color:var(--green)">0.96</div>
+        <div class="bias-status">
+          <span class="badge badge-green">✓ Fair</span>
+        </div>
+        <div style="margin-top:10px">
+          <div class="progress-track">
+            <div class="progress-fill" style="background:var(--green); width:96%"></div>
+          </div>
+          <div style="font-size:10px; color:var(--text3); margin-top:4px">No age discrimination</div>
+        </div>
+      </div>
+      <div class="bias-card">
+        <div class="bias-label">Statistical Parity — Employment</div>
+        <div class="bias-value" style="color:var(--green)">0.91</div>
+        <div class="bias-status">
+          <span class="badge badge-green">✓ Fair</span>
+        </div>
+        <div style="margin-top:10px">
+          <div class="progress-track">
+            <div class="progress-fill" style="background:var(--green); width:91%"></div>
+          </div>
+        </div>
+      </div>
+      <div class="bias-card">
+        <div class="bias-label">Predictive Parity — Zone</div>
+        <div class="bias-value" style="color:var(--green)">0.93</div>
+        <div class="bias-status">
+          <span class="badge badge-green">✓ Fair</span>
+        </div>
+        <div style="margin-top:10px">
+          <div class="progress-track">
+            <div class="progress-fill" style="background:var(--green); width:93%"></div>
+          </div>
+        </div>
+      </div>
+      <div class="bias-card">
+        <div class="bias-label">Calibration — Female Heads of Household</div>
+        <div class="bias-value" style="color:var(--green)">0.99</div>
+        <div class="bias-status">
+          <span class="badge badge-green">✓ Excellent</span>
+        </div>
+        <div style="margin-top:10px">
+          <div class="progress-track">
+            <div class="progress-fill" style="background:var(--green); width:99%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <!-- Taux d'éligibilité par région -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Eligibility Rate by Region</div>
+          <div class="card-sub">Fair inter-regional comparison</div>
+        </div>
+        <div class="chart-wrap"><canvas id="regionBiasChart"></canvas></div>
+      </div>
+
+      <!-- Taux par genre -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Eligibility Rate by Gender</div>
+          <div class="card-sub">Verified male/female parity</div>
+        </div>
+        <div class="chart-wrap"><canvas id="genreBiasChart"></canvas></div>
+      </div>
+    </div>
+
+    <div class="notification success" style="margin-top:20px">
+      <div class="notif-icon">✓</div>
+      <div>
+        <div class="notif-title">Automatic Alert Enabled</div>
+        <div class="notif-text">If a disparate impact exceeds the alert threshold, automatic model revision is triggered and a notification is sent to the audit team.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =============================== -->
+  <!-- PAGE: SÉCURITÉ AES-256           -->
+  <!-- =============================== -->
+  <div class="page" id="page-securite">
+
+    <div class="grid-2" style="margin-bottom:24px">
+      <!-- Architecture sécurité -->
+      <div>
+        <div class="security-item">
+          <div class="sec-icon" style="background:var(--green-dim)">🔒</div>
+          <div class="sec-content">
+            <div class="sec-title">AES-256-GCM Encryption</div>
+            <div class="sec-desc">All personal data (CIN, income, address) are encrypted with AES-256-GCM before any database write. Keys are rotated every 30 days.</div>
+            <div class="sec-status"><span class="badge badge-green">✓ Active</span></div>
+          </div>
+        </div>
+        <div class="security-item">
+          <div class="sec-icon" style="background:var(--blue-dim)">🔑</div>
+          <div class="sec-content">
+            <div class="sec-title">KMS — Key Management</div>
+            <div class="sec-desc">Envelope encryption architecture: data key encrypted by master key stored in FIPS 140-2 certified HSM (Hardware Security Module).</div>
+            <div class="sec-status"><span class="badge badge-green">✓ Certified</span></div>
+          </div>
+        </div>
+        <div class="security-item">
+          <div class="sec-icon" style="background:var(--amber-dim)">📋</div>
+          <div class="sec-content">
+            <div class="sec-title">Immutable Audit Trail</div>
+            <div class="sec-desc">Each AI decision is recorded with SHA-256 hash guaranteeing integrity. RFC 3161 certified timestamp. Retention: minimum 10 years.</div>
+            <div class="sec-status"><span class="badge badge-amber">⚠ 2 alerts this month</span></div>
+          </div>
+        </div>
+        <div class="security-item">
+          <div class="sec-icon" style="background:var(--purple-dim)">🛡</div>
+          <div class="sec-content">
+            <div class="sec-title">Pseudonymization & GDPR-SN</div>
+            <div class="sec-desc">Compliance with law 2008-12 on personal data. Training data is pseudonymized. Right to erasure implemented.</div>
+            <div class="sec-status"><span class="badge badge-green">✓ Compliant</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visualisation chiffrement -->
+      <div class="card">
+        <div class="card-title" style="margin-bottom:16px">◼ Real-time Encryption Flow</div>
+        <div style="font-size:12px; color:var(--text3); margin-bottom:10px">Clear data → AES-256-GCM → Encrypted storage</div>
+        <div class="enc-visual" id="enc-display">
+          Loading flow…
+        </div>
+        <div style="margin-top:16px; display:flex; gap:8px; flex-wrap:wrap" id="enc-stats">
+          <div class="score-item" style="flex:1; min-width:90px">
+            <div class="score-num" style="color:var(--green); font-size:18px">AES-256</div>
+            <div class="score-lbl">Algorithm</div>
+          </div>
+          <div class="score-item" style="flex:1; min-width:90px">
+            <div class="score-num" style="color:var(--blue); font-size:18px">GCM</div>
+            <div class="score-lbl">Mode</div>
+          </div>
+          <div class="score-item" style="flex:1; min-width:90px">
+            <div class="score-num" style="color:var(--amber); font-size:18px">96-bit</div>
+            <div class="score-lbl">Random IV</div>
+          </div>
+          <div class="score-item" style="flex:1; min-width:90px">
+            <div class="score-num" style="color:var(--purple); font-size:18px">128-bit</div>
+            <div class="score-lbl">Auth Tag</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Log sécurité -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Security Log (last 24h)</div>
+        <span class="badge badge-green">No intrusion</span>
+      </div>
+      <div id="sec-log">
+        <!-- Dynamique -->
+      </div>
+    </div>
+  </div>
+
+  <!-- =============================== -->
+  <!-- PAGE: AUDIT & LOGS               -->
+  <!-- =============================== -->
+  <div class="page" id="page-audit">
+    <div class="grid-2" style="margin-bottom:24px">
+      <div class="card">
+        <div class="card-title" style="margin-bottom:16px">AI Model Activity (30 days)</div>
+        <div class="chart-wrap"><canvas id="auditChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="margin-bottom:16px">Decision Distribution</div>
+        <div class="chart-wrap chart-wrap-sm"><canvas id="decisionChart"></canvas></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Complete Audit Log</div>
+        <div class="card-sub">Each entry is SHA-256 signed — immutable</div>
+      </div>
+      <div id="audit-log-container">
+        <!-- Dynamique -->
+      </div>
+    </div>
+  </div>
+
+  <!-- =============================== -->
+  <!-- PAGE: RAPPORT CONFIANCE          -->
+  <!-- =============================== -->
+  <div class="page" id="page-rapport">
+    <div class="hero" style="margin-bottom:32px">
+      <div class="hero-eyebrow">Monthly Report — March 2026</div>
+      <div class="hero-title">System AI Trust <em>Score</em></div>
+      <div class="hero-desc">Performance summary, fairness metrics, security indicators and transparency for March 2026.</div>
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="telechargerRapport()">⬇ Download Complete PDF</button>
+      </div>
+    </div>
+
+    <div class="stats-grid" style="margin-bottom:24px">
+      <div class="stat-card">
+        <div class="stat-top"><div class="stat-icon green">◈</div><span class="stat-trend up">+2%</span></div>
+        <div class="stat-value">87%</div>
+        <div class="stat-label">Global Trust</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top"><div class="stat-icon blue">⬡</div><span class="stat-trend up">Improved</span></div>
+        <div class="stat-value">0.94</div>
+        <div class="stat-label">Average Fairness Index</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top"><div class="stat-icon green">🔒</div><span class="stat-trend neutral">0 leaks</span></div>
+        <div class="stat-value">100%</div>
+        <div class="stat-label">Protected Data</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top"><div class="stat-icon amber">📋</div><span class="stat-trend up">98%</span></div>
+        <div class="stat-value">1,847</div>
+        <div class="stat-label">Explained Decisions</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title" style="margin-bottom:16px">Trust Score Evolution</div>
+        <div class="chart-wrap"><canvas id="trustEvolutionChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="margin-bottom:16px">Radar — Trust Dimensions</div>
+        <div class="chart-wrap chart-wrap-sm"><canvas id="radarChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<!-- MODAL: SHAP -->
+<div class="modal-overlay" id="shap-modal">
+  <div class="modal">
+    <div class="modal-title">◈ SHAP Explanation — Application <span id="modal-id">--</span></div>
+    <div class="modal-desc">Here are the factors that influenced the AI decision for this specific application. Positive values favor eligibility, negative values disfavor it.</div>
+    <div id="modal-shap-bars"></div>
+    <div class="modal-actions" style="margin-top:20px">
+      <button class="btn btn-secondary" onclick="closeModal('shap-modal')">Close</button>
+      <button class="btn btn-primary">Download Explanation</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+// ===== DATA & STATE =====
+const CHART_DEFAULTS = {
+  color: 'rgba(232,237,245,0.9)',
+  gridColor: 'rgba(255,255,255,0.05)',
+  font: "'Space Grotesk', sans-serif"
+};
+
+Chart.defaults.color = CHART_DEFAULTS.color;
+Chart.defaults.font.family = CHART_DEFAULTS.font;
+
+const regions = ['Dakar','Thiès','Saint-Louis','Ziguinchor','Kaolack','Diourbel','Tambacounda','Matam'];
+const programmes = ['CMU','PNBSF','Bourses familiales'];
+
+// Données simulées historique
+const historique = [
+  { id:'SNT-2026-0847', prog:'CMU', region:'Dakar', genre:'F', revenu:75000, conf:91, decision:'eligible', date:'21/03/2026' },
+  { id:'SNT-2026-0846', prog:'PNBSF', region:'Tambacounda', genre:'F', revenu:48000, conf:88, decision:'eligible', date:'21/03/2026' },
+  { id:'SNT-2026-0845', prog:'CMU', region:'Thiès', genre:'M', revenu:145000, conf:72, decision:'ineligible', date:'21/03/2026' },
+  { id:'SNT-2026-0844', prog:'PNBSF', region:'Saint-Louis', genre:'F', revenu:62000, conf:65, decision:'review', date:'20/03/2026' },
+  { id:'SNT-2026-0843', prog:'Family Assistance', region:'Ziguinchor', genre:'F', revenu:35000, conf:95, decision:'eligible', date:'20/03/2026' },
+  { id:'SNT-2026-0842', prog:'CMU', region:'Kaolack', genre:'M', revenu:92000, conf:79, decision:'eligible', date:'20/03/2026' },
+  { id:'SNT-2026-0841', prog:'PNBSF', region:'Dakar', genre:'F', revenu:110000, conf:58, decision:'review', date:'19/03/2026' },
+  { id:'SNT-2026-0840', prog:'CMU', region:'Diourbel', genre:'M', revenu:55000, conf:87, decision:'eligible', date:'19/03/2026' },
+  { id:'SNT-2026-0839', prog:'Family Assistance', region:'Matam', genre:'F', revenu:28000, conf:97, decision:'eligible', date:'18/03/2026' },
+  { id:'SNT-2026-0838', prog:'CMU', region:'Thiès', genre:'M', revenu:180000, conf:80, decision:'ineligible', date:'18/03/2026' },
+];
+
+const decisionLabels = { eligible:'Eligible', ineligible:'Not Eligible', review:'Under Review' };
+const decisionBadge = { eligible:'badge-green', ineligible:'badge-red', review:'badge-amber' };
+
+let shapResult = null;
+let charts = {};
+
+// ===== SIDEBAR MOBILE =====
+function toggleSidebar() {
+  const sidebar  = document.getElementById('sidebar');
+  const overlay  = document.getElementById('sidebar-overlay');
+  const btn      = document.getElementById('hamburger-btn');
+  const isOpen   = sidebar.classList.contains('open');
+  if (isOpen) { closeSidebar(); }
+  else {
+    sidebar.classList.add('open');
+    overlay.classList.add('active');
+    btn.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('active');
+  document.getElementById('hamburger-btn').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Ferme la sidebar sur la touche Échap
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
+
+// ===== NAVIGATION =====
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+
+  // Marque l'item actif dans la nav (cherche onclick contenant l'id)
+  document.querySelectorAll('.nav-item').forEach(btn => {
+    if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes("'"+id+"'")) {
+      btn.classList.add('active');
+    }
+  });
+
+  const titles = {
+    dashboard:    ['Dashboard',           'Overview of AI social assistance system'],
+    demande:      ['New Application',     'Submit and analyze a social assistance application'],
+    historique:   ['Application History', 'All decisions and their SHAP explanation'],
+    explicabilite:['SHAP Explainability', 'Analysis of decision factors with full transparency'],
+    biais:        ['Bias Detection',      'Real-time algorithmic fairness monitoring'],
+    securite:     ['AES-256 Security',    'Encryption architecture and data protection'],
+    audit:        ['Audit & Logs',        'Immutable audit log and complete traceability'],
+    rapport:      ['Trust Report',        'Monthly summary of trust metrics']
+  };
+  document.getElementById('page-title').textContent = titles[id][0];
+  document.getElementById('page-sub').textContent   = titles[id][1];
+
+  // Ferme la sidebar sur mobile après navigation
+  if (window.innerWidth <= 960) closeSidebar();
+
+  if (id === 'dashboard')    initDashboard();
+  if (id === 'historique')   initHistorique();
+  if (id === 'explicabilite') initExplicabilite();
+  if (id === 'biais')        initBiais();
+  if (id === 'securite')     initSecurite();
+  if (id === 'audit')        initAudit();
+  if (id === 'rapport')      initRapport();
+}
+
+// ===== DASHBOARD =====
+function initDashboard() {
+  // Recent table
+  const tb = document.getElementById('recent-table');
+  tb.innerHTML = historique.slice(0,5).map(d => `
+    <tr>
+      <td><span style="font-family:var(--mono); font-size:11px; color:var(--text3)">${d.id}</span></td>
+      <td><span class="badge badge-blue">${d.prog}</span></td>
+      <td>${d.region}</td>
+      <td>
+        <div style="display:flex; align-items:center; gap:6px">
+          <div class="progress-track" style="width:50px; height:4px">
+            <div class="progress-fill" style="background:${d.conf>80?'var(--green)':d.conf>65?'var(--amber)':'var(--red)'}; width:${d.conf}%"></div>
+          </div>
+          <span style="font-size:11px; font-family:var(--mono)">${d.conf}%</span>
+        </div>
+      </td>
+      <td><span class="badge ${decisionBadge[d.decision]}">${decisionLabels[d.decision]}</span></td>
+      <td style="color:var(--text3); font-size:12px">${d.date}</td>
+      <td><button class="btn btn-secondary" style="padding:4px 10px; font-size:11px" onclick="openShapModal('${d.id}')">SHAP ◈</button></td>
+    </tr>
+  `).join('');
+
+  // Week chart
+  destroyChart('weekChart');
+  const wCtx = document.getElementById('weekChart').getContext('2d');
+  charts.weekChart = new Chart(wCtx, {
+    type: 'bar',
+    data: {
+      labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+      datasets: [
+      { label: 'Eligible', data: [42,58,35,71,63,28,19], backgroundColor: 'rgba(0,214,143,0.7)', borderRadius: 4 },
+        { label: 'Not Eligible', data: [18,22,14,28,19,12,8], backgroundColor: 'rgba(239,68,68,0.6)', borderRadius: 4 },
+        { label: 'Under Review', data: [8,12,6,14,10,5,3], backgroundColor: 'rgba(245,158,11,0.6)', borderRadius: 4 }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { labels: { boxWidth: 12, font: { size: 11 } } } },
+      scales: {
+        x: { grid: { color: CHART_DEFAULTS.gridColor }, stacked: true },
+        y: { grid: { color: CHART_DEFAULTS.gridColor }, stacked: true }
+      }
+    }
+  });
+
+  // Programme doughnut
+  destroyChart('progChart');
+  const pCtx = document.getElementById('progChart').getContext('2d');
+  charts.progChart = new Chart(pCtx, {
+    type: 'doughnut',
+    data: {
+      labels: ['CMU', 'PNBSF', 'Family Assistance'],
+      datasets: [{
+        data: [48, 32, 20],
+        backgroundColor: ['rgba(0,214,143,0.8)', 'rgba(59,130,246,0.8)', 'rgba(139,92,246,0.8)'],
+        borderWidth: 2, borderColor: '#050C1A'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '65%',
+      plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 }, padding: 16 } } }
+    }
+  });
+}
+
+// ===== HISTORIQUE =====
+function initHistorique() {
+  const tb = document.getElementById('hist-table');
+  tb.innerHTML = historique.map(d => `
+    <tr>
+      <td><span style="font-family:var(--mono); font-size:11px; color:var(--text2)">${d.id}</span></td>
+      <td><span class="badge badge-blue">${d.prog}</span></td>
+      <td>${d.region}</td>
+      <td><span class="badge ${d.genre==='F'?'badge-purple':'badge-blue'}">${d.genre==='F'?'♀ Female':'♂ Male'}</span></td>
+      <td style="font-family:var(--mono); font-size:12px">${d.revenu.toLocaleString('en-US')} F</td>
+      <td>
+        <div style="display:flex; align-items:center; gap:6px">
+          <div class="progress-track" style="width:50px; height:4px">
+            <div class="progress-fill" style="background:${d.conf>80?'var(--green)':d.conf>65?'var(--amber)':'var(--red)'}; width:${d.conf}%"></div>
+          </div>
+          <span style="font-size:11px; font-family:var(--mono)">${d.conf}%</span>
+        </div>
+      </td>
+      <td><span class="badge ${decisionBadge[d.decision]}">${decisionLabels[d.decision]}</span></td>
+      <td style="color:var(--text3); font-size:12px">${d.date}</td>
+      <td><button class="btn btn-secondary" style="padding:4px 10px; font-size:11px" onclick="openShapModal('${d.id}')">◈</button></td>
+    </tr>
+  `).join('');
+}
+
+// ===== EXPLICABILITÉ =====
+function initExplicabilite() {
+  // Global SHAP importance
+  destroyChart('shapGlobalChart');
+  const ctx = document.getElementById('shapGlobalChart').getContext('2d');
+  const shapLabels = ['Income / pers.', 'Household Size', 'Rural Zone', 'Nb Children', 'Employment', 'Housing', 'Drinking Water', 'Disability'];
+  const shapVals = [0.42, 0.31, 0.22, 0.19, 0.15, 0.12, 0.09, 0.07];
+  charts.shapGlobalChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: shapLabels,
+      datasets: [{
+        data: shapVals,
+        backgroundColor: shapVals.map((v,i) => `rgba(0,214,143,${0.4+i*0.07})`),
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: CHART_DEFAULTS.gridColor }, title: { display: true, text: 'Average SHAP value |φᵢ|', font: { size: 11 } } },
+        y: { grid: { color: 'transparent' } }
+      }
+    }
+  });
+
+  // Distribution confiance
+  destroyChart('confDistChart');
+  const ctx2 = document.getElementById('confDistChart').getContext('2d');
+  charts.confDistChart = new Chart(ctx2, {
+    type: 'bar',
+    data: {
+      labels: ['50-60%', '60-70%', '70-75%', '75-80%', '80-85%', '85-90%', '90-95%', '95-100%'],
+      datasets: [{
+        data: [28, 65, 112, 198, 342, 487, 398, 217],
+        backgroundColor: 'rgba(0,214,143,0.65)',
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: CHART_DEFAULTS.gridColor } },
+        y: { grid: { color: CHART_DEFAULTS.gridColor }, title: { display: true, text: 'Nb applications', font: { size: 11 } } }
+      }
+    }
+  });
+
+  updateSimulation();
+}
+
+function updateSimulation() {
+  const rev = parseInt(document.getElementById('sim-revenu').value);
+  const men = parseInt(document.getElementById('sim-menage').value);
+  const enf = parseInt(document.getElementById('sim-enfants').value);
+  const zone = document.getElementById('sim-zone').value;
+
+  document.getElementById('sim-revenu-val').textContent = rev.toLocaleString('en-US') + ' FCFA';
+  document.getElementById('sim-menage-val').textContent = men + ' people';
+  document.getElementById('sim-enfants-val').textContent = enf + (enf===1?' child':' children');
+
+  const revPP = rev / men;
+  const shapRevenu = revPP < 15000 ? +0.38 : revPP < 25000 ? +0.20 : revPP < 40000 ? +0.05 : -0.22;
+  const shapMenage = men >= 6 ? +0.18 : men >= 4 ? +0.08 : -0.05;
+  const shapEnfants = enf >= 4 ? +0.19 : enf >= 2 ? +0.10 : enf >= 1 ? +0.04 : -0.03;
+  const shapZone = zone === 'rural' ? +0.14 : zone === 'periurbain' ? +0.05 : -0.08;
+
+  const total = shapRevenu + shapMenage + shapEnfants + shapZone;
+  const conf = Math.min(98, Math.max(40, Math.round(55 + total * 100)));
+  const eligible = total > 0;
+
+  const bars = [
+    { label: 'Income per person', val: shapRevenu },
+    { label: 'Household size', val: shapMenage },
+    { label: 'Number of children', val: shapEnfants },
+    { label: 'Geographic zone', val: shapZone }
+  ];
+
+  document.getElementById('sim-shap-bars').innerHTML = bars.map(b => renderShapBar(b.label, b.val, 0.45)).join('');
+  document.getElementById('sim-decision').textContent = eligible ? 'Eligible ✓' : 'Not Eligible ✗';
+  document.getElementById('sim-decision').style.color = eligible ? 'var(--green)' : 'var(--red)';
+  document.getElementById('sim-conf').textContent = 'Confidence: ' + conf + '%';
+}
+
+// ===== BIAIS =====
+function initBiais() {
+  destroyChart('regionBiasChart');
+  const ctx = document.getElementById('regionBiasChart').getContext('2d');
+  charts.regionBiasChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: regions,
+      datasets: [{
+        label: 'Eligibility Rate (%)',
+        data: [62, 71, 68, 74, 66, 70, 78, 76],
+        backgroundColor: regions.map((_,i) => i===0 ? 'rgba(245,158,11,0.7)' : 'rgba(0,214,143,0.65)'),
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: CHART_DEFAULTS.gridColor } },
+        y: { grid: { color: CHART_DEFAULTS.gridColor }, min: 50, max: 90, title: { display: true, text: '% eligible', font: { size: 11 } } }
+      }
+    }
+  });
+
+  destroyChart('genreBiasChart');
+  const ctx2 = document.getElementById('genreBiasChart').getContext('2d');
+  charts.genreBiasChart = new Chart(ctx2, {
+    type: 'radar',
+    data: {
+      labels: ['CMU', 'PNBSF', 'Family Assistance', 'Low Income', 'Rural Zone', 'Disability'],
+      datasets: [
+        { label: 'Females', data: [68, 76, 82, 79, 84, 88], fill: true, backgroundColor: 'rgba(139,92,246,0.15)', borderColor: 'rgba(139,92,246,0.8)', pointBackgroundColor: 'rgba(139,92,246,0.8)' },
+        { label: 'Males', data: [67, 72, 78, 76, 81, 85], fill: true, backgroundColor: 'rgba(0,214,143,0.1)', borderColor: 'rgba(0,214,143,0.6)', pointBackgroundColor: 'rgba(0,214,143,0.6)' }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        r: {
+          grid: { color: 'rgba(255,255,255,0.06)' },
+          ticks: { display: false },
+          min: 60, max: 95
+        }
+      },
+      plugins: { legend: { labels: { boxWidth: 12, font: { size: 11 } } } }
+    }
+  });
+}
+
+// ===== SÉCURITÉ =====
+function initSecurite() {
+  // Encryption live display
+  const snippets = [
+    '{"ninea":"SN-2026-****","revenu":"ENC:a7f3c2d891b4e56f...","region":"ENC:9b2d4f7a1c3e8d20..."}',
+    'AES-256-GCM | IV: 8f3a2b7c1d9e4f05 | TAG: 3d7c9a2f1b8e4d65',
+    'HMAC-SHA256: 5c3f8b2a9d7e1c04f6b3a8d2e7f1c9b4a5d3f8b2a9d7e1c04...',
+    'Key rotation: 2026-03-21T06:00:00Z | TTL: 30 days | HSM: FIPS-140-2',
+    '{"status":"encrypted","algo":"AES-256-GCM","mode":"envelope","compliant":true}'
+  ];
+  let idx = 0;
+  setInterval(() => {
+    document.getElementById('enc-display').textContent = snippets[idx % snippets.length];
+    idx++;
+  }, 2500);
+  document.getElementById('enc-display').textContent = snippets[0];
+
+  // Security log
+  const logs = [
+    { time:'10:47:23', msg:'Encrypting application SNT-2026-0847 — AES-256-GCM', hash:'a3f8b2c1' },
+    { time:'10:46:01', msg:'Scheduled encryption key rotation executed', hash:'9d2e7f4a' },
+    { time:'10:42:17', msg:'DGPSN agent connection authenticated (MFA validated)', hash:'5c1b8e3d' },
+    { time:'10:38:55', msg:'Unauthorized access attempt blocked — IP: 41.82.XX', hash:'7f3c9a2b' },
+    { time:'10:31:40', msg:'Encrypting batch 12 applications — duration 34ms', hash:'2a8d4f1c' },
+    { time:'09:58:12', msg:'Encrypted backup exported to secondary HSM', hash:'6b4e7c9a' },
+    { time:'09:45:30', msg:'Audit trail: 1847 entries verified SHA-256 OK', hash:'1d3f8b5e' },
+  ];
+  document.getElementById('sec-log').innerHTML = logs.map(l => `
+    <div class="log-item">
+      <span class="log-time">${l.time}</span>
+      <span class="log-msg">${l.msg}</span>
+      <span class="log-hash">#${l.hash}</span>
+    </div>
+  `).join('');
+}
+
+// ===== AUDIT =====
+function initAudit() {
+  destroyChart('auditChart');
+  const ctx = document.getElementById('auditChart').getContext('2d');
+  const days = Array.from({length:30}, (_,i) => `${i+1}/03`);
+  charts.auditChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: days,
+      datasets: [{
+        label: 'Decisions',
+        data: days.map(() => Math.floor(40 + Math.random()*80)),
+        borderColor: 'rgba(0,214,143,0.8)',
+        backgroundColor: 'rgba(0,214,143,0.07)',
+        fill: true, tension: 0.4, pointRadius: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: CHART_DEFAULTS.gridColor }, ticks: { maxTicksLimit: 10 } },
+        y: { grid: { color: CHART_DEFAULTS.gridColor } }
+      }
+    }
+  });
+
+  destroyChart('decisionChart');
+  const ctx2 = document.getElementById('decisionChart').getContext('2d');
+  charts.decisionChart = new Chart(ctx2, {
+    type: 'doughnut',
+    data: {
+      labels: ['Eligible (68%)', 'Not Eligible (22%)', 'Under Review (10%)'],
+      datasets: [{
+        data: [68, 22, 10],
+        backgroundColor: ['rgba(0,214,143,0.8)', 'rgba(239,68,68,0.7)', 'rgba(245,158,11,0.7)'],
+        borderWidth: 2, borderColor: '#050C1A'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '60%',
+      plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11 }, padding: 12 } } }
+    }
+  });
+
+  const auditItems = [
+    { time:'2026-03-21 10:47:23', action:'DECISION_ELIGIBLE', id:'SNT-2026-0847', agent:'AI-Engine-v2.1', hash:'a3f8b2c1d9e4f705' },
+    { time:'2026-03-21 10:45:10', action:'DATA_ENCRYPTED', id:'SNT-2026-0847', agent:'CryptoService', hash:'9b2d4f7a1c3e8d20' },
+    { time:'2026-03-21 10:43:55', action:'SHAP_COMPUTED', id:'SNT-2026-0847', agent:'SHAP-Engine', hash:'5f1c8e3a9d7b2f04' },
+    { time:'2026-03-21 10:42:01', action:'BIAS_CHECK_PASS', id:'SNT-2026-0847', agent:'FairnessModule', hash:'2a7d4f9c1b6e8035' },
+    { time:'2026-03-21 10:40:18', action:'FORM_SUBMITTED', id:'SNT-2026-0847', agent:'WebUI-v1.4', hash:'7c3b9a2f1d8e4c05' },
+  ];
+
+  document.getElementById('audit-log-container').innerHTML = auditItems.map(a => `
+    <div class="log-item" style="padding:12px 0">
+      <span class="log-time" style="width:180px">${a.time}</span>
+      <span class="badge ${a.action.includes('ELIGIBLE')?'badge-green':a.action.includes('FAIL')?'badge-red':'badge-blue'}" style="font-size:10px; flex-shrink:0">${a.action}</span>
+      <span class="log-msg" style="padding:0 12px">${a.id}</span>
+      <span class="log-hash" style="color:var(--text3)">Agent: ${a.agent}</span>
+      <span class="log-hash" style="margin-left:auto">SHA: ${a.hash}</span>
+    </div>
+  `).join('');
+}
+
+// ===== RAPPORT =====
+function initRapport() {
+  destroyChart('trustEvolutionChart');
+  const ctx = document.getElementById('trustEvolutionChart').getContext('2d');
+  charts.trustEvolutionChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['Oct 25','Nov 25','Dec 25','Jan 26','Feb 26','Mar 26'],
+      datasets: [{
+        label: 'Global Trust Score (%)',
+        data: [76, 78, 80, 83, 85, 87],
+        borderColor: 'rgba(0,214,143,0.9)',
+        backgroundColor: 'rgba(0,214,143,0.08)',
+        fill: true, tension: 0.4, pointRadius: 5
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { labels: { boxWidth: 12 } } },
+      scales: {
+        x: { grid: { color: CHART_DEFAULTS.gridColor } },
+        y: { grid: { color: CHART_DEFAULTS.gridColor }, min: 60, max: 100 }
+      }
+    }
+  });
+
+  destroyChart('radarChart');
+  const ctx2 = document.getElementById('radarChart').getContext('2d');
+  charts.radarChart = new Chart(ctx2, {
+    type: 'radar',
+    data: {
+      labels: ['Precision', 'Fairness', 'Robustness', 'Transparency', 'Security', 'Explainability'],
+      datasets: [{
+        label: 'March 2026',
+        data: [89, 94, 84, 91, 100, 88],
+        fill: true,
+        backgroundColor: 'rgba(0,214,143,0.12)',
+        borderColor: 'rgba(0,214,143,0.8)',
+        pointBackgroundColor: 'rgba(0,214,143,0.8)'
+      }, {
+        label: 'ISMS Target',
+        data: [85, 90, 80, 85, 95, 85],
+        fill: false,
+        borderColor: 'rgba(255,255,255,0.15)',
+        pointBackgroundColor: 'rgba(255,255,255,0.3)',
+        borderDash: [5,5]
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        r: {
+          grid: { color: 'rgba(255,255,255,0.07)' },
+          ticks: { display: false },
+          min: 60, max: 100,
+          pointLabels: { font: { size: 11 } }
+        }
+      },
+      plugins: { legend: { labels: { boxWidth: 12, font: { size: 11 } } } }
+    }
+  });
+}
+
+// ===== FORMULAIRE IA =====
+function analyserDemande() {
+  const ninea = document.getElementById('f-ninea').value;
+  const prog = document.getElementById('f-programme').value;
+  const revenu = parseInt(document.getElementById('f-revenu').value) || 0;
+  const menage = parseInt(document.getElementById('f-menage').value) || 1;
+  const region = document.getElementById('f-region').value;
+  const emploi = document.getElementById('f-emploi').value;
+
+  if (!prog || !revenu || !menage || !region || !emploi) {
+    alert('Please fill in all mandatory fields (*)');
+    return;
+  }
+
+  document.getElementById('form-view').style.display = 'none';
+  document.getElementById('loading-view').style.display = 'block';
+  document.getElementById('result-view').style.display = 'none';
+
+  const steps = [
+    'Encrypting data with AES-256-GCM…',
+    'Verifying mandatory fields…',
+    'Calculating vulnerability score…',
+    'Running XGBoost model…',
+    'Computing SHAP values…',
+    'Checking fairness & bias…',
+    'Generating confidence score…',
+    'Finalizing report…'
+  ];
+
+  let step = 0;
+  const prog_el = document.getElementById('loading-progress');
+  const step_el = document.getElementById('loading-step');
+
+  const interval = setInterval(() => {
+    step++;
+    prog_el.style.width = (step / steps.length * 100) + '%';
+    step_el.textContent = steps[step-1] || 'Finalisation…';
+    if (step >= steps.length) {
+      clearInterval(interval);
+      setTimeout(() => afficherResultat(revenu, menage, prog, region), 600);
+    }
+  }, 350);
+}
+
+function afficherResultat(revenu, menage, prog, region) {
+  document.getElementById('loading-view').style.display = 'none';
+  document.getElementById('result-view').style.display = 'block';
+
+  const revPP = revenu / menage;
+  const eligible = revPP < 30000 || (revPP < 40000 && menage >= 5);
+  const review = !eligible && revPP < 45000;
+
+  let status = eligible ? 'eligible' : review ? 'review' : 'ineligible';
+  const conf = eligible ? (75 + Math.floor(Math.random()*23)) : review ? (55 + Math.floor(Math.random()*18)) : (60 + Math.floor(Math.random()*20));
+
+  // Update header
+  const rh = document.getElementById('result-header');
+  const ri = document.getElementById('result-icon');
+  const rt = document.getElementById('result-title');
+  const rm = document.getElementById('result-meta');
+
+  rh.className = `result-header ${status}`;
+  ri.className = `result-icon ${status}`;
+  ri.textContent = eligible ? '✓' : review ? '⚠' : '✗';
+  rt.className = `result-title ${status}`;
+  rt.textContent = eligible ? 'Eligible' : review ? 'Review Required' : 'Not Eligible';
+  rm.textContent = prog + ' — ' + region;
+
+  // Confidence ring
+  const circumference = 251.2;
+  const offset = circumference - (conf / 100) * circumference;
+  setTimeout(() => {
+    document.getElementById('conf-ring').style.strokeDashoffset = offset;
+    document.getElementById('conf-ring').style.stroke = eligible ? 'var(--green)' : review ? 'var(--amber)' : 'var(--red)';
+  }, 200);
+  document.getElementById('conf-pct').textContent = conf + '%';
+  document.getElementById('conf-pct').style.color = eligible ? 'var(--green)' : review ? 'var(--amber)' : 'var(--red)';
+
+  // SHAP bars
+  const shapFactors = [
+    { label: 'Income per pers.', val: revPP < 25000 ? +0.38 : revPP < 40000 ? +0.12 : -0.31 },
+    { label: 'Household size', val: menage >= 6 ? +0.21 : menage >= 4 ? +0.10 : -0.08 },
+    { label: 'Poverty threshold', val: revPP < 30000 ? +0.28 : revPP < 45000 ? +0.05 : -0.22 },
+    { label: 'Geographic zone', val: ['Tambacounda','Matam','Kolda','Kédougou'].includes(region) ? +0.15 : 0.02 },
+    { label: 'Specific vulnerability', val: +0.08 },
+    { label: 'Program type', val: prog === 'CMU' ? +0.05 : prog === 'PNBSF' ? +0.12 : +0.18 }
+  ];
+
+  shapResult = shapFactors;
+  const maxVal = Math.max(...shapFactors.map(f => Math.abs(f.val)));
+  document.getElementById('shap-bars').innerHTML = shapFactors.map(f => renderShapBar(f.label, f.val, maxVal)).join('');
+
+  // Score breakdown
+  document.getElementById('sc-precision').textContent = (70 + Math.floor(conf * 0.25)) + '%';
+  document.getElementById('sc-equite').textContent = (85 + Math.floor(Math.random()*12)) + '%';
+  document.getElementById('sc-robustesse').textContent = (75 + Math.floor(Math.random()*18)) + '%';
+  document.getElementById('sc-transparence').textContent = '98%';
+}
+
+function renderShapBar(label, val, maxVal) {
+  const pct = Math.abs(val) / maxVal * 100;
+  const positive = val >= 0;
+  return `
+    <div class="shap-row">
+      <div class="shap-label">${label}</div>
+      <div class="shap-bar-track">
+        <div class="shap-bar-fill ${positive?'positive':'negative'}" style="width:${pct}%"></div>
+      </div>
+      <div class="shap-value ${positive?'positive':'negative'}">${positive?'+':''}${val.toFixed(3)}</div>
+    </div>
+  `;
+}
+
+function resetForm() {
+  document.getElementById('form-view').style.display = 'block';
+  document.getElementById('loading-view').style.display = 'none';
+  document.getElementById('result-view').style.display = 'none';
+  ['f-ninea','f-revenu','f-menage','f-enfants'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+}
+
+// ===== MODAL SHAP =====
+function openShapModal(id) {
+  const d = historique.find(h => h.id === id);
+  if (!d) return;
+  document.getElementById('modal-id').textContent = id;
+  const shapFactors = [
+    { label: 'Income per person', val: d.revenu/3 < 25000 ? +0.32 : -0.18 },
+    { label: 'Household size', val: +0.14 },
+    { label: 'Geographic zone', val: d.region !== 'Dakar' ? +0.12 : -0.05 },
+    { label: 'Gender', val: d.genre === 'F' ? +0.06 : +0.04 },
+    { label: 'Program', val: d.prog === 'PNBSF' ? +0.18 : +0.08 }
+  ];
+  const maxVal = Math.max(...shapFactors.map(f => Math.abs(f.val)));
+  document.getElementById('modal-shap-bars').innerHTML = shapFactors.map(f => renderShapBar(f.label, f.val, maxVal)).join('');
+  document.getElementById('shap-modal').classList.add('open');
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+// ===== UTILS =====
+function destroyChart(id) {
+  if (charts[id]) { charts[id].destroy(); delete charts[id]; }
+}
+
+function telechargerRapport() {
+  alert('📄 PDF report generated! In production, this report would be digitally signed and available for download.');
+}
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', () => {
+  initDashboard();
+  // Animate counter
+  const counters = document.querySelectorAll('[id^="s-"]');
+  // Encryption display on security page
+});
+
+// Close modal on overlay click
+document.getElementById('shap-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal('shap-modal');
+});
+</script>
+</body>
+</html>
